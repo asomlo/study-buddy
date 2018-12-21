@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Study Buddy</title>
+        <link rel="stylesheet" href="/css/stylesheet.css" type="text/css" />
+    </head>
+    <body>
+        <header id="header">
+            <h1>Study Buddy</h1>
+            <div id="navbar">
+            {{#if user}}
+                <a href="/"><div class="nav">Schedule</div></a>
+                <a href="/courses"><div class="nav">Classes</div></a>
+                <a href="/assignments"><div class="nav">Assignments</div></a>
+                <a href="/logout"><div class="nav">Logout</div></a>
+            {{else}}
+                <a href="/login"><div class="nav">Login</div></a>
+                <a href="/register"><div class="nav">Register</div></a>
+            {{/if}}
+            </div>
+        </header>
+        <div id="wrapper">
+            {{#if message}}
+                <p id="message">{{this.message}}</p>
+            {{/if}}
+            {{{ body }}}
+        </div>
+    </body>
+</html>

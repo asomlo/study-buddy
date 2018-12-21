@@ -1,0 +1,57 @@
+{{#if courses}}
+    <h2>Filter</h2>
+    <div class="content">
+        <form method="GET" action="/">
+            {{#each courses}}
+                <input type="checkbox" name="filter" value="{{this.name}}">
+                <span style="color:{{this.color}}">{{this.name}}</span><br />
+            {{/each}}
+            <br />
+            <input type="submit" value="Filter">
+        </form>
+    </div>
+    <hr>
+{{else}}
+    <p>
+        Add an assignment to a course first!
+    </p>
+{{/if}}
+{{#if overdue}}
+    <h2>Overdue</h2>
+    <div class="content">
+    {{#each overdue}}
+        <dl>
+        {{#each this}}
+            {{#if @first}}
+                <h3>{{this}}</h3>
+            {{else}}
+                <div class="content">
+                    <dt style="color:{{this.color}}">- {{this.title}}</dt>
+                    <dd>&nbsp{{this.details}}</dd>
+                </div>
+            {{/if}}
+        {{/each}}
+        </dl>
+    {{/each}}
+    </div>
+{{/if}}
+
+{{#if upcoming}}
+    <h2>Upcoming</h2>
+    <div class="content">
+    {{#each upcoming}}
+        <dl>
+            {{#each this}}
+                {{#if @first}}
+                    <h3>{{this}}</h3>
+                {{else}}
+                <div class="content">
+                    <dt style="color:{{this.color}}">- {{this.title}}</dt>
+                    <dd>&nbsp{{this.details}}</dd>
+                </div>
+                {{/if}}
+            {{/each}}
+        </dl>
+    {{/each}}
+    </div>
+{{/if}}

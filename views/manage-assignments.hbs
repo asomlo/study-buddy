@@ -1,0 +1,20 @@
+{{#if courses}}
+    <h2>Add an assignment</h2>
+    <div class="content">
+        <form action="/assignments" method="POST">
+            Class:
+            <select name="course">
+            {{#each courses}}
+                <option>{{this.name}}</option>
+            {{/each}}
+            </select><br>
+            Due: <input type="date" name="date"><br>
+            Title: <input type="text" name="title"><br>
+            Details: <textarea name="details"></textarea><br>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+{{else}}
+    <p>Add a course first!</p>
+{{/if}}
+<script src="assignments.js"></script>
