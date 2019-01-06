@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
         const todayString = today.toISOString().substring(0, 10);
 
         User.findByUsername(req.session.passport.user, (err, user) => {
-            for (let course of user.courses) {
+            for (const course of user.courses) {
                 // skip courses that user did not check (only if they submitted the filter form)
                 if (req.query.filter !== undefined && !req.query.filter.includes(course._id.toString())) {
                     continue;
@@ -77,14 +77,14 @@ app.get('/', (req, res) => {
                     return (!ele.done && ele.due < todayString);
                 });
                 // group each set of assignments into objects (keyed by their due dates)
-                for (let assignment of upcomingNotDone) {
+                for (const assignment of upcomingNotDone) {
                     if (upcoming[assignment.due] !== undefined) {
                         upcoming[assignment.due].push(assignment);
                     } else {
                         upcoming[assignment.due] = [assignment];
                     }
                 }
-                for (let assignment of overdueNotDone) {
+                for (const assignment of overdueNotDone) {
                     if (overdue[assignment.due] !== undefined) {
                         overdue[assignment.due].push(assignment);
                     } else {
@@ -95,7 +95,7 @@ app.get('/', (req, res) => {
             // convert both objects to arrays
             // 2D array with 1 element for each date, and in the subarray, first element is date while rest are assignments
             let upcomingArr = [];
-            for (let date in upcoming) {
+            for (const date in upcoming) {
                 const dateEntry = [];
                 // human readable date string
                 const dateString = (new Date(date)).toUTCString().substring(0, 16);
@@ -104,7 +104,7 @@ app.get('/', (req, res) => {
                 upcomingArr.push(dateEntry);
             }
             let overdueArr = [];
-            for (let date in overdue) {
+            for (const date in overdue) {
                 const dateEntry = [];
                 const dateString = (new Date(date)).toUTCString().substring(0, 16);
                 dateEntry.push(dateString);
@@ -123,7 +123,7 @@ app.get('/', (req, res) => {
                 } else {
                     return 0;
                 }
-            }
+            };
             upcomingArr.sort(dateSort);
             overdueArr.sort(dateSort);
 
@@ -234,7 +234,7 @@ app.post('/assignments', (req, res) => {
                 if (err) {
                     res.render('manage-assignments', {message: 'Error adding assignment', courses: user.courses});
                 } else {
-                    res.render('manage-assignments', {message: `"${newAssignment.title}" added to ${course.name}`,  courses: user.courses});
+                    res.render('manage-assignments', {message: `"${newAssignment.title}" added to ${course.name}`, courses: user.courses});
                 }
             });
         });
