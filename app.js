@@ -63,31 +63,28 @@ app.get('/', (req, res) => {
         const todayString = today.toISOString().substring(0, 10);
 
         User.findByUsername(req.session.passport.user, (err, user) => {
-            for (course of user.courses) {
+            for (let course of user.courses) {
                 // skip courses that user did not check (only if they submitted the filter form)
                 if (req.query.filter !== undefined && !req.query.filter.includes(course.name)) {
                     continue;
                 }
-                // filter assignment array to only incomplete ones (as of now there isnt actually a way to mark them done, but that will come one day i swear)
-                const notDoneAssignments = course.assignments.filter((ele) => {
-                    return !ele.done;
+                // filter upcoming incomplete assignments
+                const upcomingNotDone = course.assignments.filter(ele => {
+                    return (!ele.done && ele.due >= todayString);
                 });
-                // filter incomplete assignments into those that are past due vs. those that are still coming up
-                const upcomingNotDone = notDoneAssignments.filter((ele) => {
-                    return (ele.due >= todayString);
-                });
-                const overdueNotDone = notDoneAssignments.filter((ele) => {
-                    return (ele.due < todayString);
+                // filter overdue incomplete assignments
+                const overdueNotDone = course.assignments.filter(ele => {
+                    return (!ele.done && ele.due < todayString);
                 });
                 // group each set of assignments into objects (keyed by their due dates)
-                for (assignment of upcomingNotDone) {
+                for (let assignment of upcomingNotDone) {
                     if (upcoming[assignment.due] !== undefined) {
                         upcoming[assignment.due].push(assignment);
                     } else {
                         upcoming[assignment.due] = [assignment];
                     }
                 }
-                for (assignment of overdueNotDone) {
+                for (let assignment of overdueNotDone) {
                     if (overdue[assignment.due] !== undefined) {
                         overdue[assignment.due].push(assignment);
                     } else {
@@ -98,17 +95,17 @@ app.get('/', (req, res) => {
             // convert both objects to arrays
             // 2D array with 1 element for each date, and in the subarray, first element is date while rest are assignments
             let upcomingArr = [];
-            for (date in upcoming) {
+            for (let date in upcoming) {
                 const dateEntry = [];
+                // human readable date string
                 const dateString = (new Date(date)).toUTCString().substring(0, 16);
                 dateEntry.push(dateString);
                 dateEntry.push(...upcoming[date]);
                 upcomingArr.push(dateEntry);
             }
             let overdueArr = [];
-            for (date in overdue) {
+            for (let date in overdue) {
                 const dateEntry = [];
-                // human readable date string
                 const dateString = (new Date(date)).toUTCString().substring(0, 16);
                 dateEntry.push(dateString);
                 dateEntry.push(...overdue[date]);
@@ -130,7 +127,7 @@ app.get('/', (req, res) => {
             upcomingArr.sort(dateSort);
             overdueArr.sort(dateSort);
 
-            // if either is empty, set them to null instead of empty array so hbs knows not to even create headers
+            // if upcoming or overdue is empty, set them to null instead of empty array so hbs does not create empty date headers
             if (upcomingArr.length === 0) {
                 upcomingArr = null;
             }
@@ -161,8 +158,8 @@ app.post('/register', (req, res) => {
     if (req.body.password !== req.body.verify) {
         res.render('register', {message: "Passwords do not match"});
     } else {
-        // add user if name is not taken (username checking is handled by passport-local-mongoose)
-        User.register(new User({username: req.body.username}), req.body.password, (err) => {
+        // add user if name is not taken (username collision checking is handled by passport-local-mongoose)
+        User.register(new User({username: req.body.username}), req.body.password, err => {
             if (err) {
                 res.render('register', {message: "Username taken"});
             } else {
@@ -191,35 +188,30 @@ app.get('/courses', (req, res) => {
 });
 
 app.post('/courses', (req, res) => {
-    // create new course. add it to user in session's courses property
-    const newCourse = new Course({
-        name: req.body.name,
-        color: req.body.color,
-        assignments: []
-    });
-    newCourse.save((err) => {
-        if (err) {
-            res.render('/courses', {message: "Error adding course"});
-        } else {
-            // find currently logged in user
-            User.findByUsername(req.session.passport.user, (err, user) => {
-                if (err) {
-                    res.render('/courses', {message: "Error adding course"});
-                } else {
-                    // add course to logged in user property and reload page to show new course
-                    user.courses.push(newCourse);
-                    user.save((err) => {
-                        if (err) {
-                            res.render('/courses', {message: "Error adding course"});
-                        } else {
-                            console.log(`Course ${newCourse.name} added for ${user.username}`);
-                            res.render('manage-courses', {message: `Course ${newCourse.name} added`, courses: user.courses});
-                        }
-                    });
-                }
-            });
-        }
-    });
+    if (req.session.passport) {
+        // create new course. add it to current session's user [Course]
+        const newCourse = new Course({
+            name: req.body.name,
+            color: req.body.color,
+            assignments: []
+        });
+        User.findByUsername(req.session.passport.user, (err, user) => {
+            if (err) {
+                res.render('/courses', {message: "Error adding course"});
+            } else {
+                // add course to logged in user property and reload page to show new course
+                user.courses.push(newCourse);
+                user.save(err => {
+                    if (err) {
+                        res.render('/courses', {message: "Error adding course"});
+                    } else {
+                        console.log(`Course ${newCourse.name} added for ${user.username}`);
+                        res.render('manage-courses', {message: `Course ${newCourse.name} added`, courses: user.courses});
+                    }
+                });
+            }
+        });
+    }
 });
 
 app.get('/assignments', (req, res) => {
@@ -233,31 +225,20 @@ app.get('/assignments', (req, res) => {
 });
 
 app.post('/assignments', (req, res) => {
-    User.findByUsername(req.session.passport.user, (err, user) => {
-        for (current of user.courses) {
-            // there should never be a case where it doesnt find a match
-            if (current.name === req.body.course) {
-                const newAssignment = new Assignment(req.body.title, req.body.details, req.body.date, current.color);
-                current.assignments.push(newAssignment);
-                user.save((err) => {
-                    if (err) {
-                        res.render('manage-assignments', {message: 'Error saving user', courses: user.courses});
-                    } else {
-                        Course.findById(current._id, (err, course) => {
-                            course.assignments.push(newAssignment);
-                            course.save((err) => {
-                                if (err) {
-                                    res.render('manage-assignments', {message: 'Error saving course', courses: user.courses});
-                                } else {
-                                    res.render('manage-assignments', {message: `"${newAssignment.title}" added to ${course.name}`,  courses: user.courses});
-                                }
-                            });
-                        });
-                    }
-                });
-            }
-        }
-    });
+    if (req.session.passport) {
+        User.findByUsername(req.session.passport.user, (err, user) => {
+            const course = user.courses.id(req.body.courseID);
+            const newAssignment = new Assignment(req.body.title, req.body.details, req.body.date, course.color);
+            course.assignments.push(newAssignment);
+            user.save(err => {
+                if (err) {
+                    res.render('manage-assignments', {message: 'Error adding assignment', courses: user.courses});
+                } else {
+                    res.render('manage-assignments', {message: `"${newAssignment.title}" added to ${course.name}`,  courses: user.courses});
+                }
+            });
+        });
+    }
 });
 
 app.get('/logout', (req, res) => {
@@ -268,7 +249,5 @@ app.get('/logout', (req, res) => {
         res.redirect('/login');
     }
 });
-
-// TODO have function that deals with redirecting and printing errors in case of problem?
 
 app.listen(process.env.PORT || 3000);

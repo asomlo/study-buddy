@@ -3,9 +3,9 @@
     <div class="content">
         <form action="/assignments" method="POST">
             Class:
-            <select name="course">
+            <select name="courseID">
             {{#each courses}}
-                <option>{{this.name}}</option>
+                <option value={{this._id}}>{{this.name}}</option>
             {{/each}}
             </select><br>
             Due: <input type="date" name="date"><br>

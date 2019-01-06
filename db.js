@@ -7,6 +7,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
     // contains list of assignments created under that course
 const CourseSchema = new mongoose.Schema({
     name: String,
+    // TODO better colors
     color: {type: String, enum: ['red', 'blue', 'green', 'purple', 'orange']},
     // this will hold embedded es6 assignment class objects
     assignments: [mongoose.Schema.Types.Mixed]

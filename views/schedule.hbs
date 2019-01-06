@@ -11,47 +11,48 @@
         </form>
     </div>
     <hr>
-{{else}}
-    <p>
-        Add an assignment to a course first!
-    </p>
-{{/if}}
-{{#if overdue}}
-    <h2>Overdue</h2>
-    <div class="content">
-    {{#each overdue}}
-        <dl>
-        {{#each this}}
-            {{#if @first}}
-                <h3>{{this}}</h3>
-            {{else}}
-                <div class="content">
-                    <dt style="color:{{this.color}}">- {{this.title}}</dt>
-                    <dd>&nbsp{{this.details}}</dd>
-                </div>
-            {{/if}}
-        {{/each}}
-        </dl>
-    {{/each}}
-    </div>
-{{/if}}
-
-{{#if upcoming}}
-    <h2>Upcoming</h2>
-    <div class="content">
-    {{#each upcoming}}
-        <dl>
+    {{#if overdue}}
+        <h2>Overdue</h2>
+        <div class="content">
+        {{#each overdue}}
+            <dl>
             {{#each this}}
                 {{#if @first}}
                     <h3>{{this}}</h3>
                 {{else}}
-                <div class="content">
-                    <dt style="color:{{this.color}}">- {{this.title}}</dt>
-                    <dd>&nbsp{{this.details}}</dd>
-                </div>
+                    <div class="content">
+                        <dt style="color:{{this.color}}">- {{this.title}}</dt>
+                        <dd>&nbsp{{this.details}}</dd>
+                    </div>
                 {{/if}}
             {{/each}}
-        </dl>
-    {{/each}}
-    </div>
+            </dl>
+        {{/each}}
+        </div>
+    {{/if}}
+
+    {{#if upcoming}}
+        <h2>Upcoming</h2>
+        <div class="content">
+        {{#each upcoming}}
+            <dl>
+                {{#each this}}
+                    {{#if @first}}
+                        <h3>{{this}}</h3>
+                    {{else}}
+                    <div class="content">
+                        <dt style="color:{{this.color}}">- {{this.title}}</dt>
+                        <dd>&nbsp{{this.details}}</dd>
+                    </div>
+                    {{/if}}
+                {{/each}}
+            </dl>
+        {{/each}}
+        </div>
+    {{/if}}
+
+{{else}}
+    <p>
+        Add an assignment to a course first!
+    </p>
 {{/if}}
