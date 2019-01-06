@@ -10,7 +10,7 @@ const CourseSchema = new mongoose.Schema({
     // TODO better colors
     color: {type: String, enum: ['red', 'blue', 'green', 'purple', 'orange']},
     // this will hold embedded es6 assignment class objects
-    assignments: [mongoose.Schema.Types.Mixed]
+    assignments: []
 });
 
 // user accounts

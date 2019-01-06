@@ -3,7 +3,7 @@
     <div class="content">
         <form method="GET" action="/">
             {{#each courses}}
-                <input type="checkbox" name="filter" value="{{this.name}}">
+                <input type="checkbox" name="filter" value="{{this._id}}">
                 <span style="color:{{this.color}}">{{this.name}}</span><br />
             {{/each}}
             <br />

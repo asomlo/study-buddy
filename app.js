@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
         User.findByUsername(req.session.passport.user, (err, user) => {
             for (let course of user.courses) {
                 // skip courses that user did not check (only if they submitted the filter form)
-                if (req.query.filter !== undefined && !req.query.filter.includes(course.name)) {
+                if (req.query.filter !== undefined && !req.query.filter.includes(course._id.toString())) {
                     continue;
                 }
                 // filter upcoming incomplete assignments
