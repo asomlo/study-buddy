@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="/css/stylesheet.css" type="text/css" />
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     </head>
     <body>
         <header id="header">
@@ -13,17 +14,17 @@
             <div id="pure-g navbar">
             <!-- Not sure why, but putting <a> on newline adds a "whitespace only text node" -->
             {{#if user}}
-                <a href="/" class="nav pure-u-1 pure-u-md-1-4">Schedule</a><a href="/courses" class="nav pure-u-1 pure-u-md-1-4">Classes</a><a href="/assignments" class="nav pure-u-1 pure-u-md-1-4">Assignments</a><a href="/logout" class="nav pure-u-1 pure-u-md-1-4">Logout</a>
+            <div class="pure-button-group" role="group">
+                <a href="/" class="pure-button pure-u-1 pure-u-md-1-4">Schedule</a><a href="/courses" class="pure-button pure-u-1 pure-u-md-1-4">Classes</a><a href="/assignments" class="pure-button pure-u-1 pure-u-md-1-4">Assignments</a><a href="/logout" class="pure-button pure-u-1 pure-u-md-1-4">Logout</a>
+            </div>
             {{else}}
                 <a href="/login" class="nav pure-u-1 pure-u-md-1-4">Login</a><a href="/register" class="nav pure-u-1 pure-u-md-1-4">Register</a>
             {{/if}}
             </div>
         </header>
-        <div id="wrapper">
-            {{#if message}}
-                <p id="message">{{this.message}}</p>
-            {{/if}}
-            {{{ body }}}
-        </div>
+        {{#if message}}
+            <p id="message">{{this.message}}</p>
+        {{/if}}
+        {{{ body }}}
     </body>
 </html>

@@ -1,19 +1,20 @@
 {{#if courses}}
     <h2>Add an assignment</h2>
-    <div class="content">
-        <form action="/assignments" method="POST">
-            Class:
-            <select name="courseID">
-            {{#each courses}}
-                <option value={{this._id}}>{{this.name}}</option>
-            {{/each}}
-            </select><br>
-            Due: <input type="date" name="date"><br>
-            Title: <input type="text" name="title"><br>
-            Details: <textarea name="details"></textarea><br>
-            <input type="submit" value="Add">
-        </form>
-    </div>
+    <form class="pure-form" action="/assignments" method="POST">
+        Class:
+        <select name="courseID">
+        {{#each courses}}
+            <option value={{this._id}}>{{this.name}}</option>
+        {{/each}}
+        </select><br>
+        Due: <input type="date" name="date"><br>
+
+        <fieldset class="pure-group">
+            <input type="text" class="pure-input-1-2" placeholder="A title" name="title">
+            <textarea class="pure-input-1-2" placeholder="A description (optional)" name="details"></textarea>
+        </fieldset>
+        <button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Add assignment</button>
+    </form>
 {{else}}
     <p>Add a course first!</p>
 {{/if}}

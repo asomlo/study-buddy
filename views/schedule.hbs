@@ -1,20 +1,42 @@
 {{#if courses}}
-    <h2>Filter</h2>
-    <div class="content">
-        <form method="GET" action="/">
-            {{#each courses}}
-                <input type="checkbox" name="filter" value="{{this._id}}">
-                <span style="color:{{this.color}}">{{this.name}}</span><br />
-            {{/each}}
-            <br />
-            <input type="submit" value="Filter">
-        </form>
+<h2>Filter</h2>
+<form method="GET" action="/">
+    <div class="pure-g">
+        {{#each courses}}
+        <span class="pure-u-1-2 pure-u-md-1-4">
+            <span style="color:{{this.color}}"><input type="checkbox" name="filter" value="{{this._id}}"> {{this.name}}</span>
+        </span>
+        {{/each}}
     </div>
-    <hr>
-    {{#if overdue}}
-        <h2>Overdue</h2>
-        <div>
-        {{#each overdue}}
+
+    <br />
+    <input type="submit" value="Filter">
+</form>
+{{#if overdue}}
+    <h2>Overdue</h2><button id="collapseOverdue">Hide</button>
+    <div id="overdue">
+    {{#each overdue}}
+        {{#each this}}
+            {{#if @first}}
+                <h3>{{this}}</h3>
+                <div class="pure-g">
+            {{else}}
+                <div class="assignment pure-u-1 pure-u-md-1-2 pure-u-lg-1-4" style="background-color:{{this.color}}">
+                    <h4>{{this.title}}</h4>
+                    <p>{{this.details}}</p>
+                </div>
+            {{/if}}
+        {{/each}}
+    </div>
+    {{/each}}
+    </div>
+    <hr />
+{{/if}}
+{{#if upcoming}}
+    <h2>Upcoming</h2><button id="collapseUpcoming">Hide</button>
+    <div id="upcoming">
+    {{#each upcoming}}
+        <dl>
             {{#each this}}
                 {{#if @first}}
                     <h3>{{this}}</h3>
@@ -26,33 +48,12 @@
                     </div>
                 {{/if}}
             {{/each}}
-        </div>
-        {{/each}}
-        </div>
-    {{/if}}
-    {{#if upcoming}}
-        <h2>Upcoming</h2>
-        <div class="content">
-        {{#each upcoming}}
-            <dl>
-                {{#each this}}
-                    {{#if @first}}
-                        <h3>{{this}}</h3>
-                        <div class="pure-g">
-                    {{else}}
-                        <div class="assignment pure-u-1 pure-u-md-1-2 pure-u-lg-1-4" style="background-color:{{this.color}}">
-                            <h4>{{this.title}}</h4>
-                            <p>{{this.details}}</p>
-                        </div>
-                    {{/if}}
-                {{/each}}
-            </dl>
-        {{/each}}
-        </div>
-    {{/if}}
-
+        </dl>
+    {{/each}}
+    </div>
+{{/if}}
 {{else}}
     <p>
-        Add an assignment to a course first!
+        Nothing upcoming!
     </p>
 {{/if}}
