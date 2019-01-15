@@ -4,19 +4,18 @@
         <meta charset="utf-8">
         <title>Study Buddy</title>
         <link rel="stylesheet" href="/css/stylesheet.css" type="text/css" />
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
     </head>
     <body>
         <header id="header">
             <h1>Study Buddy</h1>
-            <div id="navbar">
+            <div id="pure-g navbar">
+            <!-- Not sure why, but putting <a> on newline adds a "whitespace only text node" -->
             {{#if user}}
-                <a href="/"><div class="nav">Schedule</div></a>
-                <a href="/courses"><div class="nav">Classes</div></a>
-                <a href="/assignments"><div class="nav">Assignments</div></a>
-                <a href="/logout"><div class="nav">Logout</div></a>
+                <a href="/" class="nav pure-u-1 pure-u-md-1-4">Schedule</a><a href="/courses" class="nav pure-u-1 pure-u-md-1-4">Classes</a><a href="/assignments" class="nav pure-u-1 pure-u-md-1-4">Assignments</a><a href="/logout" class="nav pure-u-1 pure-u-md-1-4">Logout</a>
             {{else}}
-                <a href="/login"><div class="nav">Login</div></a>
-                <a href="/register"><div class="nav">Register</div></a>
+                <a href="/login" class="nav pure-u-1 pure-u-md-1-4">Login</a><a href="/register" class="nav pure-u-1 pure-u-md-1-4">Register</a>
             {{/if}}
             </div>
         </header>

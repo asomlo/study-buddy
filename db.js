@@ -8,7 +8,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const CourseSchema = new mongoose.Schema({
     name: String,
     // TODO better colors
-    color: {type: String, enum: ['red', 'blue', 'green', 'purple', 'orange']},
+    color: String,
     // this will hold embedded es6 assignment class objects
     assignments: []
 });

@@ -197,13 +197,13 @@ app.post('/courses', (req, res) => {
         });
         User.findByUsername(req.session.passport.user, (err, user) => {
             if (err) {
-                res.render('/courses', {message: "Error adding course"});
+                res.render('manage-courses', {message: "Error adding course (1)"});
             } else {
                 // add course to logged in user property and reload page to show new course
                 user.courses.push(newCourse);
                 user.save(err => {
                     if (err) {
-                        res.render('/courses', {message: "Error adding course"});
+                        res.render('manage-courses', {message: "Error adding course (2)"});
                     } else {
                         console.log(`Course ${newCourse.name} added for ${user.username}`);
                         res.render('manage-courses', {message: `Course ${newCourse.name} added`, courses: user.courses});
