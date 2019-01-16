@@ -5,7 +5,7 @@
         {{#each courses}}
         <span class="pure-u-1-2 pure-u-md-1-4" style="color:{{this.color}}">
             <label for="{{this._id}}">
-                <input type="checkbox" name="filter" value="{{this._id}}" id="{{this._id}}"> {{this.name}}
+                <input type="checkbox" value="{{this._id}}" id="{{this._id}}" checked> {{this.name}}
             </label>
         </span>
         {{/each}}
@@ -15,30 +15,10 @@
     <input type="submit" value="Filter">
 </form>
 {{#if overdue}}
-    <h2>Overdue</h2><button id="collapseOverdue">Hide</button>
+    <h2>Overdue</h2>
+    <button id="collapseOverdue">Hide</button>
     <div id="overdue">
-    {{#each overdue}}
-        {{#each this}}
-            {{#if @first}}
-                <h3>{{this}}</h3>
-                <div class="pure-g">
-            {{else}}
-                <div class="assignment pure-u-1 pure-u-md-1-2 pure-u-lg-1-4" style="background-color:{{this.color}}">
-                    <h4>{{this.title}}</h4>
-                    <p>{{this.details}}</p>
-                </div>
-            {{/if}}
-        {{/each}}
-    </div>
-    {{/each}}
-    </div>
-    <hr />
-{{/if}}
-{{#if upcoming}}
-    <h2>Upcoming</h2><button id="collapseUpcoming">Hide</button>
-    <div id="upcoming">
-    {{#each upcoming}}
-        <dl>
+        {{#each overdue}}
             {{#each this}}
                 {{#if @first}}
                     <h3>{{this}}</h3>
@@ -50,12 +30,33 @@
                     </div>
                 {{/if}}
             {{/each}}
-        </dl>
-    {{/each}}
+        </div>
+        {{/each}}
+    </div>
+    <hr />
+{{/if}}
+{{#if upcoming}}
+    <h2>Upcoming</h2>
+    <button id="collapseUpcoming">Hide</button>
+    <div id="upcoming">
+        {{#each upcoming}}
+            {{#each this}}
+                {{#if @first}}
+                    <h3>{{this}}</h3>
+                    <div class="pure-g">
+                {{else}}
+                    <div class="assignment pure-u-1 pure-u-md-1-2 pure-u-lg-1-4" style="background-color:{{this.color}}">
+                        <h4>{{this.title}}</h4>
+                        <p>{{this.details}}</p>
+                    </div>
+                {{/if}}
+            {{/each}}
+        </div>
+        {{/each}}
     </div>
 {{/if}}
 {{else}}
-    <p>
-        Nothing upcoming!
-    </p>
+    <a href="/courses">
+        Add a course first!
+    </a>
 {{/if}}
